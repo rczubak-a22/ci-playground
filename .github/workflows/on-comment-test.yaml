@@ -1,0 +1,20 @@
+name: "On comment test workflow"
+
+on:
+  push:
+    branches: ["main", "**"]
+
+  pull_request:
+    branches: ["main", "**"]
+
+  issue_comment:
+    types: [created]
+
+
+jobs:
+  react-to-comment:
+    if: github.event_name == 'issue_comment' && contains(github.event.comment.body, '/test_comment')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
