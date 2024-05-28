@@ -13,6 +13,6 @@ on:
 
 jobs:
   react-to-comment:
-    if: if: github.event_name == 'issue_comment' && contains(github.event.comment.body, '/test_comment')
+    if: github.event_name == 'issue_comment' && contains(github.event.comment.body, '/test_comment')
   run: |
     echo "Triggered by comment"
