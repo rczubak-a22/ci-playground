@@ -2,10 +2,10 @@ name: "On comment test workflow"
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "**"]
 
   pull_request:
-    branches: ["main"]
+    branches: ["main", "**"]
 
   issue_comment:
     types: [created]
