@@ -6,10 +6,16 @@ on:
 
   pull_request:
     branches: ["main", "**"]
+    types: [opened, synchronize, reopened]
 
   issue_comment:
     types: [created]
 
+permissions:
+  id-token: write
+  contents: read
+  issues: read
+  pull-requests: read
 
 jobs:
   react-to-comment:
@@ -18,3 +24,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: print event json
+        run: echo "${{ tojson(github.event) }}"
+      - uses: jwalton/gh-find-current-pr@master
+        id: findPr
+        with:
+          state: all
+      - name: Post comment about triggered action
+        if: success() && steps.findPr.outputs.number
+        env:
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+        run: |
+          echo "${PR_NUMBER}"
+
