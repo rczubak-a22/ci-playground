@@ -15,7 +15,7 @@ permissions:
   id-token: write
   contents: read
   issues: read
-  pull-requests: read
+  pull-requests: write
 
 jobs:
   react-to-comment:
