@@ -18,14 +18,17 @@ permissions:
   pull-requests: write
 
 jobs:
+  print-github-event-json:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print event JSON
+        run: echo "${{ tojson(github.event) }}"
   react-to-comment:
     if: github.event_name == 'issue_comment' && startsWith(github.event.comment.body, '/test_comment')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: print event json
-        run: echo "${{ tojson(github.event) }}"
       - uses: jwalton/gh-find-current-pr@master
         id: findPr
         with:
