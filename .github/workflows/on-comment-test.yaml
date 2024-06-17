@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   react-to-comment:
-    if: github.event_name == 'issue_comment' && contains(github.event.comment.body, '/test_comment')
+    if: github.event_name == 'issue_comment' && startsWith(github.event.comment.body, '/test_comment')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -36,4 +36,14 @@ jobs:
           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
         run: |
           echo "${PR_NUMBER}"
+      - name: Post a comment
+        run: |
+          set -x
+          COMMENT_URL="${{ github.event.issue.comments_url }}"
+          curl -X POST \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Content-Type: application/vnd.github+json" \
+          -d "{\"body\": \"Action triggered by comment: ${{ github.event.comment.body }}: [View logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})\"}" \
+          $COMMENT_URL
+
 
