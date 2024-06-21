@@ -1,0 +1,36 @@
+name: "Post comment for current PR"
+description: "Posts a comment for current Pull Request"
+
+inputs:
+  comment:
+    description: "Comment to be posted"
+    required: true
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: 'Check PR number for issue_comment event'
+      if: ${{ github.event_name == 'issue_comment' }}
+      shell: bash
+      run: echo "::set-output name=issue_number::${{ github.event.issue.number }}"
+    - name: 'Check PR number for pull_request event'
+      if: ${{ github.event_name == 'pull_request' }}
+      shell: bash
+      run: echo "::set-output name=issue_number::${{ github.event.pull_request.number }}"
+    - name: 'Fail for unsupported events'
+      if: ${{ github.event_name != 'issue_comment' && github.event_name != 'pull_request' }}
+      shell: bash
+      run: |
+        echo "Action does not support event: ${{ github.event_name }}. Supported events: issue_comment, pull_request"
+        exit 1
+    - name: 'Post comment'
+      uses: 'actions/github-script@v6'
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: ${{ steps.set-outputs.outputs.issue_number }},
+            body: inputs.comment,
+            owner: context.repo.owner,
+            repo: context.repo.repo
+          })

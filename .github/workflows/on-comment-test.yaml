@@ -32,7 +32,7 @@ jobs:
         startsWith(github.event.comment.body, '/build') ||
         startsWith(github.event.comment.body, '/test')
       )
-    uses: area22-ie/cicd/post-pr-comment@TTDP-4053-ci-fix-pr-number-for-comment
+    uses: .github/workflows/post-pr-comment@main
     with:
       comment: "Action triggered by comment: ${{ github.event.comment.body }}: [View logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
     secrets: inherit
