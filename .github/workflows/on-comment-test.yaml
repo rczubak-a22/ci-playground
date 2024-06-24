@@ -32,7 +32,7 @@ jobs:
         startsWith(github.event.comment.body, '/build') ||
         startsWith(github.event.comment.body, '/test')
       )
-    uses: ./.github/post-pr-comment
+    uses: ./.github/actions/post-pr-comment@main
     with:
       comment: "Action triggered by comment: ${{ github.event.comment.body }}: [View logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
     secrets: inherit
